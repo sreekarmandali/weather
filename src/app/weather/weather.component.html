@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-12 col-sm-12">
+  <form >
+    <mat-form-field class="example-full-width" appearance="outline">
+      
+      <input type="text" class="text-md-center" matInput [formControl]="searchData" [matAutocomplete]="auto" >
+      <mat-icon matSuffix>search</mat-icon>
+      <mat-icon matPrefix>location_on</mat-icon>
+      <mat-autocomplete #auto="matAutocomplete" >
+        <mat-option *ngFor="let option of flteredCityData | async" [value]="option.name+ ','+option.state">
+          {{option.name+','+option.state}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>
+</div>
+<div class="container mr-md-4">
+<div class="panelsDiv">
+<div class="d-flex panelsDiv2 flex-row p-1 ">
+  <ng-template ngFor let-details [ngForOf]="weatherData.daily">
+  <div class="gridMeasure border rounded "  [ngClass]="{ 'currentGrid':currentGrid.dt!==undefined? details.dt===currentGrid.dt:false}" (click)="currentGrid=details;getHourlyGraph();">
+    
+  <div class="text-center"><h4>  {{details.dt.toString().slice(0,3)}}</h4></div>
+  <div class="row">
+    <div class="col-6 text-right "><h4 class="d-inline">{{details.temp.max.toString().split('.')[0] }}</h4> <h4 class="d-inline">&#176;</h4></div>
+    <div class="col-6 text-left"><h4 class="d-inline text-muted">{{details.temp.max.toString().split('.')[1] || '00' }}</h4> <h4 class="d-inline text-muted">&#176;</h4></div>
+  </div>
+  
+  <div class="text-center "><img [src]="image[details.weather[0].main]" class="imgCss"/></div>
+  <br>
+  <div class="text-center "><small class="text-muted"> <b>{{details.weather[0].description  | titlecase}}</b></small></div>
+
+  
+  </div>
+</ng-template>
+</div>
+</div>
+
+
+<div class="panelsDiv">
+
+
+<div class="container graphWidth  ml-md-4">
+  <div class="row">
+
+    
+      <div class="col-6 ">
+        <div class="row">
+        <div class="col-6 text-center"> <h1 class="d-inline bigFont">{{currentGrid.currentTemp}}</h1> <h1 class="d-inline bigFont">&#176;</h1></div>
+       <div class="col-6 text-left"><img [src]="image[currentGrid.currentWeather]" class="currentImageCss d-inline"/></div>
+      </div>
+      </div>  
+     
+
+  </div>
+  
+  <svg width="929" height="365" id="chart" class="border border-light"></svg>
+</div>
+
+
+
+
+</div>
+</div>
+
+
+  

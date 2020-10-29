@@ -1,0 +1,44 @@
+
+  
+  .example-full-width {
+    width: 100%;
+  }
+  .gridMeasure{
+    width:120px;
+    height:160px;
+
+    border:1px solid #e6e6e6 
+
+  }
+  .gridMeasure:hover,.currentGrid{
+    cursor:pointer;
+    border:1px solid blue !important
+  }
+  .imgCss{
+    width: 45px ;
+    height: 44px;
+  }
+  .graphWidth{
+    width: 929px;
+    height: 435px;
+  }
+  .currentImageCss{
+    width:108px;
+    height:104px;
+  }
+  .bigFont{
+    font-size:3.5rem;
+  }
+  
+  
+  @media only screen and (max-width: 600px) {
+    .panelsDiv{
+      width: 400px;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    .panelsDiv2{
+     width:1028px;
+     overflow-x: auto;
+    }
+  }
