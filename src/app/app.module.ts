@@ -12,9 +12,11 @@ import {MatSelectModule} from '@angular/material/select'
 import {ReactiveFormsModule,FormsModule} from '@angular/forms';
 import { WeatherComponent } from './weather/weather.component';
 import {MatIconModule} from '@angular/material/icon'
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule,HttpClient} from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { ChartsModule } from 'ng2-charts';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 
 @NgModule({
@@ -33,10 +35,20 @@ import { ChartsModule } from 'ng2-charts';
     BrowserAnimationsModule,
     HttpClientModule,
     NgbModule,
-    ChartsModule
+    ChartsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
 
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}

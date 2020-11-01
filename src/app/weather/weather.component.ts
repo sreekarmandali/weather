@@ -188,9 +188,10 @@ console.log(this.currentGrid)
   svg.selectAll("*").remove();
   
   
-   let margin = {top: 20, right: 20, bottom: 30, left: 50};
- let  width = +svg.attr("width") - margin.left - margin.right;
-  let height = +svg.attr("height") - margin.top - margin.bottom;
+  
+  let margin = {top: 20, right: 80, bottom: 30, left: 50};
+   let width = parseInt(d3.select("#chart").style("width")) - margin.left - margin.right,
+   height = parseInt(d3.select("#chart").style("height")) - margin.top - margin.bottom;
   let g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
    
@@ -205,35 +206,86 @@ console.log(this.currentGrid)
         .x(function(d) { return x(d.hour); })
         .y(function(d) { return y(d.value); });
     
+    let ticks=[];
+    this.graphData.forEach(x=>{
+      ticks.push(x.value)
+    })
     
-    
-      x.domain(d3.extent(this.graphData, function(d) { return d.hour; }));
+    x.domain(d3.extent(this.graphData, function(d) { return d.hour; }));
       y.domain(d3.extent(this.graphData, function(d) { return d.value; }));
-    
+      
+      var xaxisGenerator=d3.axisBottom(x).tickValues(this.graphData.map(d => d.hour))
+      .tickFormat((d, i)=> {
+         return  this.graphData[i].value;
+      });
       g.append("g")
           .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x))
+          .call(xaxisGenerator);
+          
         ;
     
-      g.append("g")
-          .call(d3.axisLeft(y))
-        .append("text")
-          .attr("fill", "#000")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", "0.71em")
-          .attr("text-anchor", "end")
-          .text("celsius").select(".domain")
-          .remove();
+      // g.append("g")
+      //     .call(d3.axisLeft(y))
+      //   .append("text")
+      //     .attr("fill", "#000")
+      //     .attr("transform", "rotate(-90)")
+      //     .attr("y", 6)
+      //     .attr("dy", "0.71em")
+      //     .attr("text-anchor", "end")
+      //     .text("celsius").select(".domain")
+      //     .remove();
     
       g.append("path")
           .datum(this.graphData)
           .attr("fill", "none")
           .attr("stroke", "steelblue")
-          .attr("stroke-linejoin", "round")
+         
           .attr("stroke-linecap", "round")
           .attr("stroke-width", 1.5)
           .attr("d", line);
+
+
+          g.selectAll(".dot")
+    .data(this.graphData)
+  .enter().append("circle") 
+    .attr("fill", "#FFFFFF").
+    attr("stroke","steelblue")
+    .attr("cx", function(d, i) { return x(d.hour) })
+    .attr("cy", function(d) { return y(d.value) })
+    .attr("r", 5)
+
+    g.selectAll(".line")
+    .data(this.graphData)
+  .enter().append("line") 
+    
+    .attr("stroke"," rgba(0, 0, 0, 0.2)")
+    .attr("x1", function(d) { return x(d.hour) })
+    .attr("x2", function(d) { return x(d.hour) })
+    .attr("y1", function(d) { return y(d.value+width) })
+    .attr("y2", function(d) { return y(d.value-width) })
+
+
+  //   g.selectAll(".xaxis text").attr("transform", function(d) {
+  //     return "translate(0,0)rotate(0)";
+  // }).append("text")
+  // .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+  // .attr("transform", "translate(0,"+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+  // .text("value");
+  
+  d3.selectAll('g.tick ')
+  
+  .select('text')
+  .attr('class', 'tickText').attr('fill',"rgba(0, 0, 0, 0.6)").attr("font-family","sans-serif").attr("font-weight","bold");
+  
+ 
+  d3.selectAll('g.tick').select('line').remove();      
+          
+
+    
+   
+    
+    
+      
     
 }
 }

@@ -47,7 +47,7 @@
     
       <div class="col-6 ">
         <div class="row">
-        <div class="col-6 text-center"> <h1 class="d-inline bigFont">{{currentGrid.currentTemp}}</h1> <h1 class="d-inline bigFont">&#176;</h1></div>
+        <div class="col-6 text-center"> <h1 class="d-inline bigFont">{{currentGrid.currentTemp}}</h1> <h1 class="d-inline bigFont">&#176;</h1><h1 class="d-inline ">C</h1></div>
        <div class="col-6 text-left"><img [src]="image[currentGrid.currentWeather]" class="currentImageCss d-inline"/></div>
       </div>
       </div>  
@@ -55,7 +55,7 @@
 
   </div>
   
-  <svg width="929" height="365" id="chart" class="border border-light"></svg>
+  <svg id="chart" class="border border-light"></svg>
 </div>
 
 
