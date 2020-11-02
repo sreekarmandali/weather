@@ -42,6 +42,7 @@ export class WeatherComponent implements OnInit {
   currentGrid:any;
   graphData=[];
   graphArea:any;
+  loader=false;
 
 image={
   "Clear":"../../assets/images/sky.png",
@@ -102,6 +103,7 @@ image={
     
 
     this.http.get('https://api.openweathermap.org/data/2.5/onecall?lat='+city.coord.lat+'&lon='+city.coord.lon+'&exclude=minutely&appid=f23ee3c61632e9ae022661c57813fc88&units=metric').subscribe(x=>{
+      
     this.weatherData=undefined;  
     this.weatherDataFormation(x)})
   }
@@ -150,6 +152,7 @@ data.daily.forEach(x => {
   console.log( x.dt.toString().slice(0,15))
   this.weatherData["hourly"][ x.dt.toString().slice(0,15)]=data.hourly.filter(y=> y.dt.toString().slice(0,15)=== x.dt.toString().slice(0,15));
 });
+
 this.getHourlyGraph();
 
 
@@ -214,10 +217,11 @@ console.log(this.currentGrid)
     x.domain(d3.extent(this.graphData, function(d) { return d.hour; }));
       y.domain(d3.extent(this.graphData, function(d) { return d.value; }));
       
-      var xaxisGenerator=d3.axisBottom(x).tickValues(this.graphData.map(d => d.hour))
-      .tickFormat((d, i)=> {
-         return  this.graphData[i].value;
-      });
+      var xaxisGenerator=d3.axisBottom(x)
+      // .tickValues(this.graphData.map(d => d.hour))
+      // .tickFormat((d, i)=> {
+      //    return  this.graphData[i].value;
+      // });
       g.append("g")
           .attr("transform", "translate(0," + height + ")")
           .call(xaxisGenerator);
@@ -263,6 +267,15 @@ console.log(this.currentGrid)
     .attr("x2", function(d) { return x(d.hour) })
     .attr("y1", function(d) { return y(d.value+width) })
     .attr("y2", function(d) { return y(d.value-width) })
+
+    g.selectAll(".dot")
+    .data(this.graphData)
+  .enter().append("text").attr("transform", "translate(0,-10)") 
+    
+    
+    .attr("x", function(d) { return x(d.hour) }).attr("y",0).attr("font-weight","bold").attr('fill',"rgba(0, 128, 0, 0.6)").text(function(d) { return d.value+'\xB0C' }).attr('font-size',"0.5rem")
+    
+    
 
 
   //   g.selectAll(".xaxis text").attr("transform", function(d) {
